@@ -1,6 +1,6 @@
 import React from 'react';
 import Cards from './Cards';
-import data from './data';
+import data from './Data';
 
 function CardList(){
     const cards = data.map(items => {
