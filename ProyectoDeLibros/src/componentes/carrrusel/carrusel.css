@@ -1,0 +1,27 @@
+.container-fluid {
+    height: 50%;
+    width: 100%;
+}
+
+.carousel-inner img {
+    height: auto;
+    max-height: 500px;
+    max-width: 500px;
+}
+
+.carousel-item{
+    padding: 50px;
+    margin: 20px;
+    border-radius: 20px;
+}
+
+.carousel-inner{
+    background-color: white !important; ;
+    max-width: 500px !important;
+    margin-left: 36%;
+    border-color: aqua !important;
+}
+
+.contenedor{
+    margin-bottom: 100px;
+}
