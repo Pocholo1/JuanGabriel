@@ -1,5 +1,5 @@
 import React from 'react'
-import { Link, HashRouter } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import './header.css'
 
 
@@ -32,8 +32,7 @@ function Header() {
                                     <a className="nav-link disabled" >Contacto</a>
                                 </li>
 
-                                <HashRouter>
-                                    <Link to='/src/componentes/registro/registro.jsx'>
+                                    <Link to='/registro'>
                                         <li className="nav-item">
                                             <a className="nav-link disabled" >Registrarse</a>
                                         </li>
@@ -41,7 +40,6 @@ function Header() {
                                     <li className="nav-item">
                                         <a className="nav-link disabled" >Iniciar sesión</a>
                                     </li>
-                                </HashRouter>
                             </ul>
                             <form className="d-flex" role="search">
                                 <input className="form-control me-2" type="search" placeholder="Search" aria-label="Search" />
