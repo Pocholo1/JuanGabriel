@@ -21,24 +21,24 @@ function Header() {
                                 </li>
 
                                 <li className="nav-item">
-                                    <a className="nav-link disabled" >Referencias</a>
+                                    <a className="nav-link active " href="#" >Referencias</a>
                                 </li>
 
                                 <li className="nav-item">
-                                    <a className="nav-link disabled" >Recursos</a>
+                                    <a className="nav-link active" href="#" >Recursos</a>
                                 </li>
 
                                 <li className="nav-item">
-                                    <a className="nav-link disabled" >Contacto</a>
+                                    <a className="nav-link active" href="#" >Contacto</a>
                                 </li>
 
                                     <Link to='/registro'>
                                         <li className="nav-item">
-                                            <a className="nav-link disabled" >Registrarse</a>
+                                            <a className="nav-link active" href="#" >Registrarse</a>
                                         </li>
                                     </Link>
                                     <li className="nav-item">
-                                        <a className="nav-link disabled" >Iniciar sesión</a>
+                                        <a className="nav-link active" href="#" >Iniciar sesión</a>
                                     </li>
                             </ul>
                             <form className="d-flex" role="search">
