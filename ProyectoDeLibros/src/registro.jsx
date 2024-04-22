@@ -1,5 +1,7 @@
 import React, { useRef, useState } from 'react'
 import './registro.css';
+import Colombia from './colombia';
+import Swal from 'sweetalert2';
 import { Link } from 'react-router-dom';
 import Header from './componentes/header/Header';
 import Footer from './componentes/footer/Footer';
@@ -18,6 +20,7 @@ export default function Registro() {
     const [passwordError, setPasswordError] = useState(false)
     const [passwordErrorRepeat, setPasswordErrorRepeat] = useState(false)
     const [passComparacion, setPassComparacion] = useState(false)
+    const [deptosIndex, setDeptosIndex] = useState(-1);
 
     const form = useRef()
 
@@ -40,7 +43,7 @@ export default function Registro() {
     function telError() {
         setTelefonoError(false)
     }
-    function fechaNacimientoErrorFuncion(){
+    function fechaNacimientoErrorFuncion() {
         setFechaNacimientoError(false)
     }
     function passError() {
@@ -59,7 +62,8 @@ export default function Registro() {
         email: "",
         direccion: "",
         telefono: "",
-        fechaNacimiento:"",
+        fechaNacimiento: "",
+        departamentoError: "",
         password: "",
         passRepeat: ""
     })
@@ -75,53 +79,54 @@ export default function Registro() {
     const handleSubmit = (e) => {
         e.preventDefault()
 
-        let validPassword = /^(?=.?[A-Z])(?=.?[a-z])(?=.?[0-9])(?=.?[#?!@$%^&*-]).{8,}$/  //Expersión regular para: Mínimo 8 caracteres de longitud. Almenos una letra mayúscula. Almenos una letra minúscula. Almenos un número. Almenos un caracter especial. https://uibakery.io/regex-library/password
+        let validPassword = /^(?=.*[A-Z]).{8,}$/;//Expersión regular para: Mínimo 8 caracteres de longitud. Almenos una letra mayúscula. Almenos una letra minúscula. Almenos un número. Almenos un caracter especial. https://uibakery.io/regex-library/password
         let validEmail = /^\w+([.-_+]?\w+)@\w+([.-]?\w+)(\.\w{2,10})+$/; //Expresión regular para validar email, es decir, que el email ingresado tenga el formato correcto de una dirección de correo electrónico
 
         if (values.identificacion.length < 5 || values.identificacion.length > 10 || values.identificacion.length === 0) {
             setIdentificacionError(true)
-            
+            return
         }
          if (values.nombres.length < 3 || values.nombres.length === 0) { //El método trim( ) elimina los espacios en blanco en ambos extremos del string.        
             setNomError(true)
-            
+            return
         }
-         if (values.apellidos.length < 3 || values.apellidos.length === 0) {
+        if (values.apellidos.length < 3 || values.apellidos.length === 0) {
             setApellidoError(true)
-            
+            return
         }
-         if (values.email.length === 0) {
+        if (values.email.length === 0) {
             setErrorEmailVacio(true)
-        
+            return
         }
 
-         if (!validEmail.test(values.email)) {
+        if (!validEmail.test(values.email)) {
             setEmailError(true)
-            
+            return
         }
-         if (values.direccion.length < 15) {
+        if (values.direccion.length < 15) {
             setDireccionError(true)
-            
+            return
         }
-         if (values.telefono.length < 10 || values.telefono.length > 10) {
+        if (values.telefono.length < 10 || values.telefono.length > 10) {
             setTelefonoError(true)
-            
+            return
         }
-         if(values.fechaNacimiento === ""){
+        if (values.fechaNacimiento === "") {
             setFechaNacimientoError(true)
-            
+            return
         }
-         if (!validPassword.test(values.password)) {
+        
+        if (!validPassword.test(values.password)) {
             setPasswordError(true)
-            
+            return
         }
-         if (values.passRepeat.length === 0) {
+        if (values.passRepeat.length === 0) {
             setPasswordErrorRepeat(true)
-            
+            return
         }
-         if (values.password !== values.passRepeat) {
+        if (values.password !== values.passRepeat) {
             setPassComparacion(true)
-            
+            return
         }
 
 
@@ -159,6 +164,12 @@ export default function Registro() {
             })
     }
 
+    const handleDepto = function (e) {
+        const opcion = e.target.value;
+        console.log("opcion-->>", opcion);
+        setDeptosIndex(opcion);
+        console.log("DeptosIndex -->>", deptosIndex)
+    }
 
     return (
         <div className='container'>
@@ -226,6 +237,40 @@ export default function Registro() {
                                     </div>
 
 
+                                    <div className='row'>
+                                        <div className="form-outline mb-4 col-6">
+                                            <label className="form-label" htmlFor="form3Example3cg">
+                                                <strong>Departamento residencia</strong>
+                                            </label>
+                                            <br></br>
+                                            <select name='deptoresidencia' onClick={handleDepto}>
+                                                <option value={-1}>Seleccione:</option>
+                                                {Colombia.map((item, i) => (
+                                                    <option key={i} value={i}>{item.departamento}</option>
+                                                ))}
+                                            </select>
+                                            </div>
+
+                                            { <div className="form-outline mb-4 col-6">
+                                                <label className="form-label" htmlFor="form3Example3cg">
+                                                    <strong>Municipio residencia</strong>
+                                                </label>
+                                                <br></br>
+                                                <select name='municipioresidencia'>
+                                                    <option value={-1}>Seleccione:</option>
+                                                    {deptosIndex > -1 && Colombia[deptosIndex].ciudades.map((item,i) =>(
+                                                        <option key={i}>{item}</option>
+                                                        ))}
+                                                </select>
+                                        </div> }
+                                    </div>
+
+
+
+
+
+
+
                                     <div className="form-outline mb-4">
                                         <label className="form-label" htmlFor="form3Example4cg">Password</label>
                                         <input type="password" id="form3Example7cg" className="form-control form-control-lg" name='password' onChange={handleChange} onClick={passError} />
@@ -262,6 +307,6 @@ export default function Registro() {
                 </section>
             </form>
             <Footer />
-        </div>
+        </div >
     )
 }
