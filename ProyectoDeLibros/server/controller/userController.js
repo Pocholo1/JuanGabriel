@@ -50,7 +50,7 @@ const controller = {
 
         login: async function (req, res) {
             try {
-                const usersData = await fs.readFile(userFilePath, "utf-8");
+                const usersData = await fs.readFile(userFilepath, "utf-8");
                 const users = JSON.parse(usersData);
 
                 for (x of users) {
