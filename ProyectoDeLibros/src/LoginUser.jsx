@@ -1,134 +1,113 @@
-import React, { useEffect, useState } from 'react';
-//import GoogleIcon from '@mui/icons-material/Google';
-//import FacebookIcon from '@mui/icons-material/Facebook';
-import AlternateEmailIcon from '@mui/icons-material/AlternateEmail';
-import PasswordIcon from '@mui/icons-material/Password';
-import GroupIcon from '@mui/icons-material/Group';
-import Header from './componentes/header/Header';
-import Footer from './footer/Footer';
-import Cookies from 'universal-cookie' //https://www.npmjs.com/package/universal-cookie import Swal from 'sweetalert2';
-//import GitHubOAuth from './githubOauth/GithHubOauth';
-import FireBaseAuth from './FireBase/FireBaseAuth';
-import GoogleOAuth from './googleOAuth/GoogleOAuth';
+import { Link } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import Cookies from 'universal-cookie';
+import Swal from 'sweetalert2';
 
-
-const Login = () => {
-
-    const cookies = new Cookies()
-    const [errorEmail, setErrorEmail] = useState(false)
-    const [errorPassword, setErrorPassword] = useState(false)
-    //const [userName, setUserName] = useState("")
-    const [showPassword, setShowPassword] = useState(true)
-
+const LoginUser = () => {
+    const cookies = new Cookies();
     const [values, setValues] = useState({
-        rol: "",
         email: "",
         password: "",
-    })
+        rol: ""
+    });
 
-    //Guarda en la variable newValues los valores ingresados en el formulario de Inicio de sesión
     const handleChange = (e) => {
-        const { name, value } = e.target
-        const newValues = {
+        const { name, value } = e.target;
+        setValues({
             ...values,
             [name]: value,
+        });
+    };
+
+    const iniciarSesion = (e) => {
+        e.preventDefault();
+
+        // Verificar que se haya seleccionado un rol
+        if (!values.rol) {
+            Swal.fire({
+                title: "Por favor selecciona un rol",
+                icon: "error"
+            });
+            return;
         }
-        setValues(newValues)
-    }
 
+        // Verificar que se hayan ingresado el email y la contraseña
+        if (!values.email || !values.password) {
+            Swal.fire({
+                title: "Por favor completa todos los campos",
+                icon: "error"
+            });
+            return;
+        }
 
-    const handleClickPassword = (e) => {
-        setErrorPassword(false)
-    }
-
-
-    const handleClickEmail = (e) => {
-        setErrorEmail(false)
-    }
-}
-const handleShowPassword = (e) => {
-    setShowPassword(!showPassword)
-}
-
-const iniciarSesion = (e) => {
-    e.preventDefault()
-    let select = document.getElementById("exampleFormControlSelect1"); //capturamos el valor seleccionado en el select values.rol = select.value //Guardamos en el arreglo "values" el rol seleccionado por medio del select.
-    if (values.password.length === 0 && values.email.length === 0) {
-        setErrorEmail(true)
-        setErrorPassword(true)
-        return
-    }
-    if (values.password.length === 0) {
-        setErrorPassword(true)
-        return
-    }
-    if (values.email.length === 0) {
-        setErrorEmail(true)
-        return
-    }
-
-    fetch("http://localhost:3001/login", {
-        method: 'POST',
-        headers: { "Content-Type": "Application/json", "Acept": "application/json" },
-        body: JSON.stringify(values)
-    })
-
-
-
-        .then(response => {
-            if (response.status === 200 && values.rol ===
-                "Usuario") {
-                cookies.set('email', values.email, {
-                    secure: true,
-                    sameSite: 'None',
-                    path: '/'
-                })
-                window.location.hash = '/sesion' //Vista para los usuarios logueados con el rol de "usuario"
-            }
-
-            else if (response.status === 200 && values.rol === "Administrador") {
-                cookies.set('email', values.email, {
-                    secure: true,
-                    sameSite: 'None',
-                    path: '/'
-                })
-                window.location.hash = '/usuarios-registrados' //vista con los usuarios registrados
-            }
-
-            else {
-                console.log("sdfd", response.status)
-                Swal.fire({
-                    title: "Las credenciales ingresadas no son correctas",
-                    icon: "error"
-                })
-                window.location.hash = '/login'
-            }
+        fetch("http://localhost:3001/login", {
+            method: 'POST',
+            headers: { "Content-Type": "application/json", "Accept": "application/json" },
+            body: JSON.stringify(values)
         })
+            .then(response => response.json())
+            .then(res => {
+                console.log("res-->>", res)
 
-        .catch(() => Swal.fire({
-            title: "No se puede iniciar sesión por un problema en el servidor",
-            icon: "error"
-        }),
-            window.location.hash = '/login'
-        )
-}
+                if (res.title === "error") {
+                    Swal.fire({
+                        title: "Las credenciales ingresadas no son correctas",
+                        icon: "error"
+                    })
+                    window.location.hash = '/login'
+                    return
+                } else {
 
-//Si ya se inició sesión y escriben en la barra de direcciones '/login' entonces lo redirige al componente InicioSesionIniciada. 
-useEffect(() => {
-    if (cookies.get('email')) {
-        window.location.hash = '/sesion'
-    }
-})
+                    
+                    cookies.set('nombre', res.nombre, {
+                        secure: true,
+                        sameSite: 'None',
+                        path: '/'
+                    });
 
-/*
-useEffect(()=>{
-const queryString = window.location.search
-const urlParams = new URLSearchParams(queryString)
-const codeParam = urlParams.get("code")
-console.log("Esto es codeParam ", codeParam)
-}, [])*/
+                    cookies.set('apellido', res.apellido, {
+                        secure: true,
+                        sameSite: 'None',
+                        path: '/'
+                    });
 
-function LoginUser() {
+                    cookies.set('email', res.email, {
+                        secure: true,
+                        sameSite: 'None',
+                        path: '/'
+                    });
+
+                    if (values.rol === "Usuario") {
+                        window.location.hash = 'usuarioRegistrado'
+                    } else {
+                        window.location.hash = 'usuario'
+                    }
+                }
+            })
+        
+
+
+
+
+
+
+
+                
+        
+        .catch(() => {
+                    Swal.fire({
+                        title: "No se puede iniciar sesión por un problema en el servidor",
+                        icon: "error"
+                    });
+                });
+    };
+
+    useEffect(() => {
+        if (cookies.get('email')) {
+            window.location.hash = '/login';
+        }
+    }, []);
+
     return (
         <div>
             <section className="vh-100 gradient-custom">
@@ -136,40 +115,39 @@ function LoginUser() {
                     <div className="row d-flex justify-content-center align-items-center h-100">
                         <div className="col-12 col-md-8 col-lg-6 col-xl-5">
                             <div className="card bg-dark text-white" >
-                                <div className="card-body p-5 text-center">
-
-                                    <div className="mb-md-5 mt-md-4 pb-5">
-
-                                        <h2 className="fw-bold mb-2 text-uppercase">Login</h2>
-                                        <p className="text-white-50 mb-5">Please enter your login and password!</p>
-
-                                        <div data-mdb-input-init className="form-outline form-white mb-4">
-                                            <input type="email" id="typeEmailX" className="form-control form-control-lg" />
-                                            <label className="form-label" >Email</label>
+                                <div className="card-body p-3 text-center d-flex flex-column justify-content-center">
+                                    <div className="mb-md-3 mt-md-2 pb-3">
+                                        <h2 className="fw-bold mb-2 text-uppercase">Inicio de Sesion </h2>
+                                        <p className="text-white-50 mb-3">Por favor ingresa tu correo y contraseña!</p>
+                                        <form onSubmit={iniciarSesion}>
+                                            <div className="form-outline form-white mb-3">
+                                                <input type="email" id="typeEmailX" className="form-control form-control-lg" name="email" onChange={handleChange} />
+                                                <label className="form-label" >Correo</label>
+                                            </div>
+                                            <div className="form-outline form-white mb-3">
+                                                <input type="password" id="typePasswordX" className="form-control form-control-lg" name="password" onChange={handleChange} />
+                                                <label className="form-label" >Contraseña</label>
+                                            </div>
+                                            <div className='rolUsuario'>
+                                                <select id="rol" name="rol" className="form-select form-select-lg" onChange={handleChange}>
+                                                    <option value="">Selecccione su rol</option>
+                                                    <option value="Usuario">Usuario</option>
+                                                    <option value="Administrador">Administrador</option>
+                                                </select>
+                                                <label htmlFor="rol">Rol</label>
+                                            </div>
+                                            <p className="small mb-3 pb-lg-1"><a className="text-white-50" href="#!">Olvido su contraseña?</a></p>
+                                            <button className="btn btn-outline-light btn-lg px-5" type="submit">Iniciar Sesion</button>
+                                        </form>
+                                        <div className="d-flex justify-content-center text-center mt-3 pt-1">
+                                            <a href="#!" className="text-white"><i className="bi bi-github fa-lg"></i></a>
+                                            <a href="#!" className="text-white"><i className="bi bi-facebook fa-lg mx-4 px-2"></i></a>
+                                            <a href="#!" className="text-white"><i className="bi bi-google fa-lg"></i></a>
                                         </div>
-
-                                        <div data-mdb-input-init className="form-outline form-white mb-4">
-                                            <input type="password" id="typePasswordX" className="form-control form-control-lg" />
-                                            <label className="form-label" >Password</label>
-                                        </div>
-
-                                        <p className="small mb-5 pb-lg-2"><a className="text-white-50" href="#!">Forgot password?</a></p>
-
-                                        <button data-mdb-button-init data-mdb-ripple-init className="btn btn-outline-light btn-lg px-5" type="submit">Login</button>
-
-                                        <div className="d-flex justify-content-center text-center mt-4 pt-1">
-                                            <a href="#!" className="text-white"><i className="fab fa-facebook-f fa-lg"></i></a>
-                                            <a href="#!" className="text-white"><i className="fab fa-twitter fa-lg mx-4 px-2"></i></a>
-                                            <a href="#!" className="text-white"><i className="fab fa-google fa-lg"></i></a>
-                                        </div>
-
                                     </div>
-
                                     <div>
-                                        <p className="mb-0">Dont have an account? <a href="#!" className="text-white-50 fw-bold">Sign Up</a>
-                                        </p>
+                                        <p className="mb-0">No tienes una cuenta creada? <Link to="/registro" className="text-white-50 fw-bold">Registrate </Link></p>
                                     </div>
-
                                 </div>
                             </div>
                         </div>
@@ -177,7 +155,7 @@ function LoginUser() {
                 </div>
             </section>
         </div>
-    )
-}
+    );
+};
 
-export default LoginUser
+export default LoginUser;

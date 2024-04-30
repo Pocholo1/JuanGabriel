@@ -15,7 +15,7 @@ function Footer() {
 
                 <div>
                     <a href="" className="me-4 text-reset">
-                       
+                    
                     </a>
                     <a href="" className="me-4 text-reset">
                         
@@ -24,7 +24,7 @@ function Footer() {
                         
                     </a>
                     <a href="" className="me-4 text-reset">
-                       
+                    
                     </a>
                     <a href="" className="me-4 text-reset">
                         

@@ -59,8 +59,11 @@ const controller = {
                         x.password === req.body.password &&
                         x.rol === req.body.rol
                     ) {
-                        res.status(200).send("0k");
-                        return;
+                        return res.json({
+                            nombre: x.nombre,
+                            apellido: x.apellido,
+                            email: x.email,
+                        });
                     }
                 }
                 res.status(400).send("Error");

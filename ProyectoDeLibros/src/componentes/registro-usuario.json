@@ -1,2 +1,30 @@
 [
+    {
+        "id": 1,
+        "identificacion": "12345",
+        "nombre": "juan",
+        "apellido": "cataño",
+        "email": "juan0730@gmail.com",
+        "direccion": "ddhddslaklddjkfnhfjd",
+        "telefono": "1234567890",
+        "fechaNacimiento": "2024-04-10",
+        "password": "Juanito_01",
+        "estado": "activo",
+        "rol": "Usuario",
+        "fecha_creacion": "2024-04-29T20:04:48.169Z"
+    },
+    {
+        "id": 2,
+        "identificacion": "12122",
+        "nombre": "Mario",
+        "apellido": "Varacuz",
+        "email": "mariovaracuz@gmail.com",
+        "direccion": "calledestapadacarreraoctava",
+        "telefono": "3205080753",
+        "fechaNacimiento": "2024-04-23",
+        "password": "Mariovaracuz_01",
+        "estado": "activo",
+        "rol": "Usuario",
+        "fecha_creacion": "2024-04-30T21:09:51.399Z"
+    }
 ]
