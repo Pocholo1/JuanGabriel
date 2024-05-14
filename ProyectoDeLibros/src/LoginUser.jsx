@@ -2,6 +2,8 @@ import { Link } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import Cookies from 'universal-cookie';
 import Swal from 'sweetalert2';
+import GoogleOAuth from './GoogleOAuth';
+
 
 const LoginUser = () => {
     const cookies = new Cookies();
@@ -138,6 +140,11 @@ const LoginUser = () => {
                                             </div>
                                             <p className="small mb-3 pb-lg-1"><a className="text-white-50" href="#!">Olvido su contraseña?</a></p>
                                             <button className="btn btn-outline-light btn-lg px-5" type="submit">Iniciar Sesion</button>
+
+                                            <div>
+                                                <GoogleOAuth/>
+                                            </div>
+                                            
                                         </form>
                                         <div className="d-flex justify-content-center text-center mt-3 pt-1">
                                             <a href="#!" className="text-white"><i className="bi bi-github fa-lg"></i></a>

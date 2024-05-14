@@ -4,6 +4,7 @@ import '../header/header.css';
 import user from '../registro-usuario.json'
 import Cookies from 'universal-cookie';
 import Body from '../body/CardList'
+import SesionExpired from '../sesionExpired/sesionExpired';
 //import './usuario.css';
 
 
@@ -64,6 +65,7 @@ function UsuarioRegistrado() {
                 </nav>
             </div>
             <Body></Body>
+            <SesionExpired></SesionExpired>
         </div>
     )
 }
